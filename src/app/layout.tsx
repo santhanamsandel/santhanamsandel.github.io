@@ -1,9 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Space_Grotesk, JetBrains_Mono } from "next/font/google";
+import { Inter, Space_Grotesk, JetBrains_Mono, Unbounded } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({ variable: "--ff-inter", subsets: ["latin"], display: "swap" });
 const display = Space_Grotesk({ variable: "--ff-display", subsets: ["latin"], display: "swap" });
+const wide = Unbounded({ variable: "--ff-wide", subsets: ["latin"], display: "swap" });
 const mono = JetBrains_Mono({ variable: "--ff-mono", subsets: ["latin"], display: "swap" });
 
 const SITE = "https://santhanamsandel.github.io";
@@ -58,8 +59,8 @@ const jsonLd = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${display.variable} ${mono.variable}`}>
-      <body className="antialiased">
+    <html lang="en" className={`${inter.variable} ${display.variable} ${mono.variable} ${wide.variable}`}>
+      <body className="antialiased bg-ink">
         <a href="#main" className="skip-link">
           Skip to content
         </a>

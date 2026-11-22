@@ -14,16 +14,7 @@ export default function Experience() {
   return (
     <section id="experience" className="relative py-24 md:py-36" aria-labelledby="exp-title">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          index="03"
-          eyebrow="Professional experience"
-          title={
-            <span id="exp-title">
-              Training teams. <span className="text-gradient">Building skills that ship.</span>
-            </span>
-          }
-          lead="From corporate AI training for an IBM Business Partner to leading analytics and AI cohorts for workforce-development foundations."
-        />
+        <SectionHeading id="exp-title" eyebrow="Career journey" title="Experience" lead="From corporate AI training for an IBM Business Partner to leading analytics and AI cohorts for workforce-development foundations." />
 
         <div ref={ref} className="relative">
           {/* Track + progress line */}
@@ -54,7 +45,7 @@ export default function Experience() {
                   </div>
 
                   <Reveal className={`pl-10 md:pl-0 ${right ? "md:order-1" : ""}`} delay={0.1}>
-                    <article className="glass rounded-2xl p-6 transition hover:border-cyan/40 md:p-8">
+                    <article className="glass-strong rounded-2xl p-6 transition hover:border-cyan/40 md:p-8">
                       <p className="mb-3 font-mono text-xs tracking-wider text-cyan md:hidden">{job.period}</p>
                       <div className="flex items-start gap-4">
                         <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-cyan/25 bg-cyan/10 text-cyan">

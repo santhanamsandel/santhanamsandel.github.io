@@ -28,22 +28,13 @@ export default function Training() {
     <section id="training" className="relative py-24 md:py-36" aria-labelledby="training-title">
       <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-navy/30 to-transparent" />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          index="06"
-          eyebrow="Training & teaching"
-          title={
-            <span id="training-title">
-              I don&apos;t just use AI. <span className="text-gradient">I teach it.</span>
-            </span>
-          }
-          lead="Instructor-led, project-based programmes for students, career-switchers and corporate teams — built around real datasets, real assessments and real outcomes."
-        />
+        <SectionHeading id="training-title" eyebrow="I don't just use AI — I teach it" title="Training" lead="Instructor-led, project-based programmes for students, career-switchers and corporate teams — built around real datasets, real assessments and real outcomes." />
 
         {/* Impact */}
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           {stats.map((s, i) => (
             <Reveal key={s.label} delay={i * 0.06}>
-              <div className="glass relative h-full overflow-hidden rounded-2xl p-5 md:p-6">
+              <div className="glass-strong relative h-full overflow-hidden rounded-2xl p-5 md:p-6">
                 <div aria-hidden className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-cyan/10 blur-2xl" />
                 <p className="font-display text-3xl font-semibold text-soft md:text-5xl">
                   <CountUp to={s.value} decimals={s.decimals ?? 0} suffix={s.suffix} />

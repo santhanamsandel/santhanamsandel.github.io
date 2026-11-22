@@ -1,6 +1,8 @@
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
 import SmoothScroll from "@/components/SmoothScroll";
+import Backdrop from "@/components/Backdrop";
+import Stats from "@/components/sections/Stats";
 import About from "@/components/sections/About";
 import Skills from "@/components/sections/Skills";
 import Experience from "@/components/sections/Experience";
@@ -15,9 +17,11 @@ export default function Home() {
   return (
     <>
       <SmoothScroll />
+      <Backdrop />
       <Nav />
       <main id="main">
         <Hero />
+        <Stats />
         <About />
         <Skills />
         <Experience />
@@ -27,7 +31,7 @@ export default function Home() {
         <Credentials />
         <Contact />
       </main>
-      <footer className="border-t border-line">
+      <footer className="border-t border-white/10 bg-ink/60 backdrop-blur">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 py-8 text-sm text-muted sm:flex-row sm:px-6 lg:px-8">
           <p>© {new Date().getFullYear()} {profile.name}. AI/ML Engineer & Technical Trainer.</p>
           <a href="#top" className="font-mono text-xs uppercase tracking-[0.2em] transition hover:text-cyan">

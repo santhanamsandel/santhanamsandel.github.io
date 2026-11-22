@@ -8,21 +8,13 @@ export default function Credentials() {
   return (
     <section id="credentials" className="relative py-24 md:py-36" aria-labelledby="cred-title">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          index="07"
-          eyebrow="Certifications & education"
-          title={
-            <span id="cred-title">
-              Grounded in <span className="text-gradient">computer science.</span>
-            </span>
-          }
-        />
+        <SectionHeading id="cred-title" eyebrow="Certifications & education" title="Credentials" />
 
         <div className="grid gap-6 lg:grid-cols-[1fr_1.4fr]">
           <div className="space-y-4">
             {education.map((e, i) => (
               <Reveal key={e.degree} delay={i * 0.08}>
-                <div className="glass relative overflow-hidden rounded-2xl p-6">
+                <div className="glass-strong relative overflow-hidden rounded-2xl p-6">
                   <div aria-hidden className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-cyan to-violet" />
                   <GraduationCap className="h-6 w-6 text-cyan" aria-hidden />
                   <h3 className="mt-4 font-display text-xl font-semibold text-soft">{e.degree}</h3>
@@ -32,7 +24,7 @@ export default function Credentials() {
               </Reveal>
             ))}
             <Reveal delay={0.16}>
-              <figure className="glass flex items-center gap-4 overflow-hidden rounded-2xl p-4">
+              <figure className="glass-strong flex items-center gap-4 overflow-hidden rounded-2xl p-4">
                 <img src="/images/plaque.webp" alt="Appreciation plaque from a Department of Training and Placement naming Mr. Santhanam L" width={700} height={830} loading="lazy" className="h-28 w-auto rounded-lg border border-line object-cover" />
                 <figcaption>
                   <p className="flex items-center gap-2 font-medium text-soft">

@@ -111,7 +111,7 @@ function Assistant() {
   }
 
   return (
-    <div className="glass flex h-full flex-col rounded-2xl">
+    <div className="glass-strong flex h-full flex-col rounded-2xl">
       <div className="flex items-center gap-3 border-b border-line p-4">
         <span className="grid h-9 w-9 place-items-center rounded-lg bg-gradient-to-br from-cyan to-violet text-ink">
           <Bot className="h-5 w-5" />
@@ -180,16 +180,7 @@ export default function AILab() {
     <section id="lab" className="relative py-24 md:py-36" aria-labelledby="lab-title">
       <div aria-hidden className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_50%_at_50%_40%,rgba(34,211,238,0.07),transparent)]" />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          index="05"
-          eyebrow="AI engineering lab"
-          title={
-            <span id="lab-title">
-              See how the <span className="text-gradient">AI actually works.</span>
-            </span>
-          }
-          lead="Interactive walkthroughs of the systems behind my projects — the same way I explain them in class. Pick a pipeline, step through each stage."
-        />
+        <SectionHeading id="lab-title" eyebrow="See how the AI works" title="AI Lab" lead="Interactive walkthroughs of the systems behind my projects — the same way I explain them in class. Pick a pipeline and step through each stage." />
 
         <Reveal>
           <div className="mb-6 flex flex-wrap gap-2" role="tablist" aria-label="Pipelines">
@@ -214,7 +205,7 @@ export default function AILab() {
 
         <div className="grid gap-6 lg:grid-cols-[1.45fr_1fr]">
           <Reveal>
-            <div ref={ref} className="glass relative overflow-hidden rounded-2xl">
+            <div ref={ref} className="glass-strong relative overflow-hidden rounded-2xl">
               <div className="flex items-start justify-between gap-4 border-b border-line p-5">
                 <div>
                   <p className="font-display text-lg font-semibold text-soft">{p.tagline}</p>

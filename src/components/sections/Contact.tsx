@@ -42,16 +42,7 @@ export default function Contact() {
     <section id="contact" className="relative overflow-hidden py-24 md:py-36" aria-labelledby="contact-title">
       <div aria-hidden className="absolute bottom-0 left-1/2 -z-10 h-[500px] w-[900px] -translate-x-1/2 translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(34,211,238,0.18),rgba(168,85,247,0.08)_40%,transparent_70%)] blur-2xl" />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          index="08"
-          eyebrow="Contact"
-          title={
-            <span id="contact-title">
-              Let&apos;s build — <span className="text-gradient">or teach</span> — something great.
-            </span>
-          }
-          lead="Open to AI/ML engineering roles, Generative AI projects, corporate training engagements and academic partnerships."
-        />
+        <SectionHeading id="contact-title" eyebrow="Get in touch" title="Contact" lead="Open to AI/ML engineering roles, Generative AI projects, corporate training engagements and academic partnerships." />
 
         <div className="grid gap-6 lg:grid-cols-[1fr_1.2fr]">
           <div className="space-y-3">
@@ -61,7 +52,7 @@ export default function Contact() {
                   href={href}
                   target={href.startsWith("http") ? "_blank" : undefined}
                   rel="noopener noreferrer"
-                  className="glass group flex items-center gap-4 rounded-2xl p-5 transition hover:border-cyan/50"
+                  className="glass-strong group flex items-center gap-4 rounded-2xl p-5 transition hover:border-cyan/50"
                 >
                   <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl border border-cyan/25 bg-cyan/10 text-cyan">
                     <Icon className="h-5 w-5" />
@@ -95,7 +86,7 @@ export default function Contact() {
           </div>
 
           <Reveal delay={0.1}>
-            <form onSubmit={onSubmit} className="glass rounded-2xl p-6 md:p-8">
+            <form onSubmit={onSubmit} className="glass-strong rounded-2xl p-6 md:p-8">
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <label htmlFor="c-name" className="mb-1.5 block text-sm text-soft/85">Name</label>

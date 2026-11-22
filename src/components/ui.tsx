@@ -31,25 +31,63 @@ export function SectionHeading({
   eyebrow,
   title,
   lead,
-  index,
+  id,
+  align = "center",
+  plain = false,
 }: {
   eyebrow: string;
-  title: ReactNode;
+  title: string;
   lead?: string;
-  index: string;
+  id?: string;
+  align?: "center" | "left";
+  /** render without on-view letter animation (for scroll-driven containers) */
+  plain?: boolean;
 }) {
+  const words = title.split(" ");
+  const center = align === "center";
   return (
-    <Reveal className="mb-12 md:mb-16 max-w-3xl">
-      <div className="flex items-center gap-3">
-        <span className="font-mono text-xs text-muted">{index}</span>
-        <span className="h-px w-10 bg-gradient-to-r from-cyan to-transparent" />
-        <span className="eyebrow">{eyebrow}</span>
-      </div>
-      <h2 className="mt-4 font-display text-4xl font-semibold leading-[1.05] tracking-tight text-soft sm:text-5xl md:text-6xl">
-        {title}
+    <div className={`mb-14 md:mb-20 ${center ? "mx-auto max-w-4xl text-center" : "max-w-3xl"}`}>
+      <motion.p
+        className="font-mono text-[11px] font-medium uppercase tracking-[0.32em] text-cyan"
+        initial={plain ? false : { opacity: 0, y: 10 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.7 }}
+      >
+        {eyebrow}
+      </motion.p>
+      <h2 id={id} className="mt-4 font-wide text-[clamp(2.1rem,7vw,5.6rem)] font-extrabold uppercase leading-[0.95] tracking-[-0.02em] text-soft">
+        {words.map((w, wi) => (
+          <span key={wi} className="inline-block overflow-hidden whitespace-nowrap pb-1 align-bottom">
+            {w.split("").map((ch, i) => (
+              <motion.span
+                key={i}
+                className="inline-block"
+                initial={plain ? false : { y: "105%", opacity: 0 }}
+                whileInView={{ y: "0%", opacity: 1 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.8, delay: (wi * 6 + i) * 0.03, ease: [0.22, 1, 0.36, 1] }}
+              >
+                {ch}
+              </motion.span>
+            ))}
+            {wi < words.length - 1 ? "\u00a0" : <span className="text-cyan text-glow">.</span>}
+          </span>
+        ))}
       </h2>
-      {lead && <p className="mt-5 text-base leading-relaxed text-muted md:text-lg">{lead}</p>}
-    </Reveal>
+      <motion.span
+        className={`accent-bar mt-5 ${center ? "mx-auto" : ""}`}
+        initial={plain ? false : { scaleX: 0 }}
+        whileInView={{ scaleX: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, delay: 0.3 }}
+      />
+      {lead && (
+        <Reveal delay={0.15}>
+          <p className={`mt-6 text-base leading-relaxed text-muted md:text-lg ${center ? "mx-auto max-w-2xl" : ""}`}>{lead}</p>
+        </Reveal>
+      )}
+    </div>
   );
 }
 
@@ -87,7 +125,7 @@ export function TiltCard({
         onPointerMove={onMove}
         onPointerLeave={onLeave}
         style={{ rotateX: rx, rotateY: ry, transformStyle: "preserve-3d" }}
-        className={`group relative h-full overflow-hidden rounded-2xl glass transition-colors duration-300 hover:border-cyan/40 ${className}`}
+        className={`group relative h-full overflow-hidden rounded-2xl glass-strong transition-colors duration-300 hover:border-cyan/40 ${className}`}
       >
         <div
           aria-hidden

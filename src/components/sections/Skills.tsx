@@ -23,16 +23,7 @@ export default function Skills() {
     <section id="skills" className="relative py-24 md:py-36" aria-labelledby="skills-title">
       <div aria-hidden className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_60%_50%_at_20%_50%,rgba(59,130,246,0.08),transparent)]" />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          index="02"
-          eyebrow="Technical skills"
-          title={
-            <span id="skills-title">
-              The stack I <span className="text-gradient">build & teach</span> with.
-            </span>
-          }
-          lead="Technologies from my resume, training work and public GitHub projects — grouped by how I use them."
-        />
+        <SectionHeading id="skills-title" eyebrow="What I work with" title="Tech stack" lead="Technologies from my resume, training work and public GitHub projects — grouped by how I use them." />
 
         {/* Category cards */}
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4" role="tablist" aria-label="Skill categories">
@@ -70,7 +61,7 @@ export default function Skills() {
         </div>
 
         {/* Active panel */}
-        <div id="skill-panel" role="tabpanel" aria-labelledby={`tab-${active}`} className="glass mt-6 rounded-2xl p-6 md:p-8">
+        <div id="skill-panel" role="tabpanel" aria-labelledby={`tab-${active}`} className="glass-strong mt-6 rounded-2xl p-6 md:p-8">
           <AnimatePresence mode="wait">
             <motion.ul
               key={active}
