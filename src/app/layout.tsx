@@ -1,0 +1,71 @@
+import type { Metadata, Viewport } from "next";
+import { Inter, Space_Grotesk, JetBrains_Mono } from "next/font/google";
+import "./globals.css";
+
+const inter = Inter({ variable: "--ff-inter", subsets: ["latin"], display: "swap" });
+const display = Space_Grotesk({ variable: "--ff-display", subsets: ["latin"], display: "swap" });
+const mono = JetBrains_Mono({ variable: "--ff-mono", subsets: ["latin"], display: "swap" });
+
+const SITE = "https://santhanamsandel.github.io";
+const TITLE = "Santhanam L — AI/ML Engineer, Generative AI Specialist & Technical Trainer";
+const DESC =
+  "Portfolio of Santhanam L: AI/ML engineering, Generative AI agents, data analytics and technical training. 380+ learners and professionals trained in Python, SQL, Power BI, machine learning and AI.";
+
+export const metadata: Metadata = {
+  metadataBase: new URL(SITE),
+  title: TITLE,
+  description: DESC,
+  keywords: [
+    "Santhanam L",
+    "AI/ML Engineer",
+    "Generative AI",
+    "Technical Trainer",
+    "Machine Learning",
+    "Data Analytics",
+    "Power BI",
+    "Python Trainer",
+    "Tamil Nadu",
+  ],
+  authors: [{ name: "Santhanam L", url: SITE }],
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "profile",
+    url: SITE,
+    title: TITLE,
+    description: DESC,
+    siteName: "Santhanam L",
+    images: [{ url: "/images/og.jpg", width: 1200, height: 630, alt: "Santhanam L — AI/ML Engineer & Technical Trainer" }],
+  },
+  twitter: { card: "summary_large_image", title: TITLE, description: DESC, images: ["/images/og.jpg"] },
+  icons: { icon: "/favicon.svg" },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#05070d",
+  width: "device-width",
+  initialScale: 1,
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Santhanam L",
+  url: SITE,
+  jobTitle: "AI/ML Engineer & Technical Trainer",
+  alumniOf: "Bharathiar University",
+  sameAs: ["https://www.linkedin.com/in/santhanam-l26/", "https://github.com/santhanamsandel"],
+};
+
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  return (
+    <html lang="en" className={`${inter.variable} ${display.variable} ${mono.variable}`}>
+      <body className="antialiased">
+        <a href="#main" className="skip-link">
+          Skip to content
+        </a>
+        {children}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      </body>
+    </html>
+  );
+}
