@@ -31,16 +31,43 @@ export function useInView(ref: RefObject<Element | null>, rootMargin = "200px") 
   return inView;
 }
 
-/** WebGL availability check so we can fall back gracefully. */
+/** WebGL availability check (computed once per page) so we can fall back gracefully. */
+let webglCache: boolean | null = null;
 export function useWebGL() {
-  const [ok, setOk] = useState<boolean | null>(null);
+  const [ok, setOk] = useState<boolean | null>(webglCache);
   useEffect(() => {
-    try {
-      const c = document.createElement("canvas");
-      setOk(!!(c.getContext("webgl2") || c.getContext("webgl")));
-    } catch {
-      setOk(false);
+    if (webglCache === null) {
+      try {
+        const c = document.createElement("canvas");
+        const gl = (c.getContext("webgl2") || c.getContext("webgl")) as WebGLRenderingContext | null;
+        webglCache = !!gl;
+        gl?.getExtension("WEBGL_lose_context")?.loseContext();
+      } catch {
+        webglCache = false;
+      }
     }
+    setOk(webglCache);
   }, []);
   return ok;
+}
+
+/** Becomes true once the page has loaded and the browser is idle — used to defer heavy WebGL. */
+export function useIdle(timeout = 1200) {
+  const [idle, setIdle] = useState(false);
+  useEffect(() => {
+    let cancelled = false;
+    const done = () => !cancelled && setIdle(true);
+    const schedule = () => {
+      const ric = (window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number }).requestIdleCallback;
+      if (ric) ric(done, { timeout });
+      else setTimeout(done, timeout);
+    };
+    if (document.readyState === "complete") schedule();
+    else window.addEventListener("load", schedule, { once: true });
+    return () => {
+      cancelled = true;
+      window.removeEventListener("load", schedule);
+    };
+  }, [timeout]);
+  return idle;
 }

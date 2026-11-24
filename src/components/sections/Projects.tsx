@@ -1,75 +1,84 @@
 "use client";
 
-import { AnimatePresence, motion, useScroll, useTransform, type MotionValue } from "framer-motion";
+import { AnimatePresence, motion, useMotionValue, useSpring } from "framer-motion";
 import { ArrowUpRight, Lock, Plus, X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState, type PointerEvent, type ReactNode } from "react";
 import { projects, profile, type Project } from "@/data/profile";
 import { useReducedMotion } from "@/lib/hooks";
 import ProjectVisual from "../ProjectVisual";
-import { GitHubIcon, SectionHeading } from "../ui";
+import { GitHubIcon, LazyMount, SectionHeading } from "../ui";
 
-function usePinnedMode() {
-  const [pinned, setPinned] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia("(min-width: 1024px) and (min-height: 720px) and (prefers-reduced-motion: no-preference)");
-    const u = () => setPinned(mq.matches);
-    u();
-    mq.addEventListener("change", u);
-    return () => mq.removeEventListener("change", u);
-  }, []);
-  return pinned;
+const filters = ["All", "Generative AI", "Machine Learning", "Data Analytics", "Python Development"] as const;
+
+/** Restrained pointer tilt (mouse only). */
+function TiltWrap({ children }: { children: ReactNode }) {
+  const rx = useSpring(useMotionValue(0), { stiffness: 200, damping: 20 });
+  const ry = useSpring(useMotionValue(0), { stiffness: 200, damping: 20 });
+  function onMove(e: PointerEvent<HTMLDivElement>) {
+    if (e.pointerType !== "mouse") return;
+    const r = e.currentTarget.getBoundingClientRect();
+    ry.set(((e.clientX - r.left) / r.width - 0.5) * 7);
+    rx.set(-((e.clientY - r.top) / r.height - 0.5) * 7);
+  }
+  return (
+    <motion.div
+      className="h-full"
+      style={{ rotateX: rx, rotateY: ry, transformPerspective: 1000 }}
+      onPointerMove={onMove}
+      onPointerLeave={() => {
+        rx.set(0);
+        ry.set(0);
+      }}
+    >
+      {children}
+    </motion.div>
+  );
 }
 
-function CardFace({ p, i, onOpen, compact }: { p: Project; i: number; onOpen: () => void; compact?: boolean }) {
+function CardFace({ p, i, onOpen }: { p: Project; i: number; onOpen: () => void }) {
   return (
     <button
       onClick={onOpen}
       className="glass-strong group relative flex h-full w-full flex-col overflow-hidden rounded-[22px] text-left transition duration-500 hover:-translate-y-1 hover:border-cyan/50 hover:shadow-[0_30px_80px_-30px_rgba(34,211,238,0.5)]"
       aria-label={`Open details: ${p.title}`}
     >
-      <div className={`relative w-full overflow-hidden border-b ${compact ? "min-h-0 flex-1" : "aspect-[16/9]"} border-white/10 bg-gradient-to-br from-navy/70 to-ink`}>
+      <div className={`relative w-full overflow-hidden border-b aspect-[16/9] border-white/10 bg-gradient-to-br from-navy/70 to-ink`}>
         <div aria-hidden className="grid-bg absolute inset-0 opacity-50" />
-        <div className="absolute inset-0 p-3 transition duration-700 group-hover:scale-105">
+        <LazyMount className="absolute inset-0 p-3 transition duration-700 group-hover:scale-105">
           <ProjectVisual kind={p.visual} />
-        </div>
-        <span className="absolute left-3 top-3 font-wide text-3xl font-extrabold text-white/10">{String(i + 1).padStart(2, "0")}</span>
+        </LazyMount>
+        <span aria-hidden className="absolute left-3 top-3 font-wide text-3xl font-extrabold text-white/10">{String(i + 1).padStart(2, "0")}</span>
+        <span className="absolute right-3 top-3 rounded-full border border-white/10 bg-ink/70 px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.18em] text-soft/70">Illustration</span>
       </div>
-      <div className={`flex flex-1 flex-col ${compact ? "p-3.5" : "p-4"}`}>
-        <p className="font-mono text-[9.5px] uppercase tracking-[0.2em] text-cyan">{p.category}</p>
-        <h3 className="mt-1.5 font-display text-[15px] font-semibold leading-snug text-soft xl:text-base">{p.title}</h3>
+      <div className="flex flex-1 flex-col p-5">
+        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-cyan">{p.category}</p>
+        <h3 className="mt-1.5 font-display text-base font-semibold leading-snug text-soft">{p.title}</h3>
+        <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-muted">{p.solution}</p>
         <ul className="mt-3 flex flex-wrap gap-1.5">
           {p.tech.slice(0, 3).map((t) => (
-            <li key={t} className="rounded-full border border-white/10 bg-ink/60 px-2 py-0.5 font-mono text-[9.5px] text-soft/75">
+            <li key={t} className="rounded-full border border-white/10 bg-ink/60 px-2 py-0.5 font-mono text-[10.5px] text-soft/80">
               {t}
             </li>
           ))}
         </ul>
-        <span className="mt-auto flex items-center gap-1.5 pt-4 font-wide text-[9.5px] font-bold uppercase tracking-[0.16em] text-soft/60 transition group-hover:text-cyan">
-          <Plus className="h-3.5 w-3.5" /> Details
+        <span className="mt-auto flex items-center justify-between gap-2 pt-5">
+          <span className="flex items-center gap-1.5 font-wide text-[10px] font-bold uppercase tracking-[0.16em] text-soft/70 transition group-hover:text-cyan">
+            <Plus className="h-3.5 w-3.5" aria-hidden /> Details
+          </span>
+          <span className="flex items-center gap-1.5 font-mono text-[10px] text-soft/70">
+            {p.github ? (
+              <>
+                <GitHubIcon className="h-3.5 w-3.5" /> Code on GitHub
+              </>
+            ) : (
+              <>
+                <Lock className="h-3.5 w-3.5" aria-hidden /> Code private
+              </>
+            )}
+          </span>
         </span>
       </div>
     </button>
-  );
-}
-
-/** Each card flies from deep space to its grid slot as the pinned section scrolls. */
-function FlyCard({ p, i, progress, onOpen }: { p: Project; i: number; progress: MotionValue<number>; onOpen: () => void }) {
-  const seed = Math.sin(i * 91.7) * 0.5 + 0.5;
-  const start = 0.04 + i * 0.055;
-  const end = start + 0.38;
-  const t = useTransform(progress, [start, end], [0, 1], { clamp: true });
-  const col = i % 4;
-  const dirX = (col - 1.5) * 2 + (seed - 0.5) * 2;
-  const x = useTransform(t, (v) => `${(1 - v) * dirX * 28}vw`);
-  const y = useTransform(t, (v) => `${(1 - v) * (i < 4 ? -30 : 30) * (0.6 + seed)}vh`);
-  const z = useTransform(t, (v) => (1 - v) * -1800);
-  const rotateY = useTransform(t, (v) => (1 - v) * (col < 2 ? 55 : -55));
-  const rotateX = useTransform(t, (v) => (1 - v) * (seed - 0.5) * 50);
-  const opacity = useTransform(t, [0, 0.25, 1], [0, 1, 1]);
-  return (
-    <motion.div style={{ x, y, z, rotateY, rotateX, opacity, transformStyle: "preserve-3d" }} className="h-full will-change-transform">
-      <CardFace p={p} i={i} onOpen={onOpen} compact />
-    </motion.div>
   );
 }
 
@@ -161,66 +170,64 @@ function Detail({ p, onClose }: { p: Project; onClose: () => void }) {
   );
 }
 
-function PinnedProjects({ onOpen }: { onOpen: (p: Project) => void }) {
-  const track = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: track, offset: ["start start", "end end"] });
-  const headingScale = useTransform(scrollYProgress, [0, 0.55], [1.15, 0.62]);
-  const headingY = useTransform(scrollYProgress, [0, 0.55], ["22vh", "0vh"]);
-  const headingOpacity = useTransform(scrollYProgress, [0, 0.06], [0, 1]);
-  const headingBlur = useTransform(scrollYProgress, [0, 0.06], ["blur(12px)", "blur(0px)"]);
-  return (
-    <div ref={track} className="relative h-[300vh]">
-      <div className="sticky top-0 flex h-screen flex-col overflow-hidden px-6 pt-[5.5rem] lg:px-8" style={{ perspective: 1400 }}>
-        <motion.div style={{ scale: headingScale, y: headingY, opacity: headingOpacity, filter: headingBlur }} className="origin-top [&>div]:!mb-3">
-          <SectionHeading id="projects-title" eyebrow="Featured works" title="Projects" plain />
-        </motion.div>
-        <div className="mx-auto grid min-h-0 w-full max-w-7xl flex-1 grid-cols-4 grid-rows-2 gap-4 pb-8 [transform-style:preserve-3d]">
-          {projects.map((p, i) => (
-            <FlyCard key={p.title} p={p} i={i} progress={scrollYProgress} onOpen={() => onOpen(p)} />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function Projects() {
-  const pinned = usePinnedMode();
   const reduced = useReducedMotion();
   const [open, setOpen] = useState<Project | null>(null);
-
-  const footer = (
-    <div className="mt-10 text-center">
-      <a href={profile.github} target="_blank" rel="noopener noreferrer" className="btn-ghost inline-flex items-center gap-2 px-6 py-3 font-wide text-[11px] font-bold uppercase tracking-[0.14em] text-soft">
-        <GitHubIcon className="h-4 w-4" /> More on GitHub <ArrowUpRight className="h-4 w-4" />
-      </a>
-    </div>
-  );
+  const [filter, setFilter] = useState<(typeof filters)[number]>("All");
+  const list = filter === "All" ? projects : projects.filter((p) => p.category === filter);
 
   return (
-    <section id="projects" className="relative" aria-labelledby="projects-title">
-      {pinned ? (
-        <PinnedProjects onOpen={setOpen} />
-      ) : (
-        <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 md:py-32" style={{ perspective: 1200 }}>
-          <SectionHeading id="projects-title" eyebrow="Featured works" title="Projects" />
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {projects.map((p, i) => (
+    <section id="projects" className="relative py-24 md:py-32" aria-labelledby="projects-title">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" style={{ perspective: 1400 }}>
+        <SectionHeading
+          id="projects-title"
+          eyebrow="Featured works"
+          title="Projects"
+          lead="Generative AI, machine learning, analytics and Python projects. Card visuals are illustrations of each system, not screenshots."
+        />
+
+        <div className="-mx-4 mb-8 flex gap-2 overflow-x-auto px-4 pb-2 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:justify-center sm:px-0" role="group" aria-label="Filter projects">
+          {filters.map((f) => (
+            <button
+              key={f}
+              onClick={() => setFilter(f)}
+              aria-pressed={filter === f}
+              className={`min-h-10 shrink-0 rounded-full border px-4 py-2 text-sm transition ${
+                filter === f ? "border-cyan bg-cyan/15 text-cyan" : "border-white/15 text-soft/70 hover:text-soft"
+              }`}
+            >
+              {f}
+            </button>
+          ))}
+        </div>
+
+        <motion.div layout className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5 xl:grid-cols-4">
+          <AnimatePresence mode="popLayout">
+            {list.map((p, i) => (
               <motion.div
                 key={p.title}
-                initial={reduced ? false : { opacity: 0, z: -400, rotateX: 25, y: 60 }}
-                whileInView={{ opacity: 1, z: 0, rotateX: 0, y: 0 }}
+                layout
+                initial={reduced ? false : { opacity: 0, y: 50, rotateX: 18 }}
+                whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+                exit={{ opacity: 0, scale: 0.96 }}
                 viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.9, delay: (i % 2) * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.8, delay: (i % 4) * 0.07, ease: [0.22, 1, 0.36, 1] }}
+                className="h-full"
               >
-                <CardFace p={p} i={i} onOpen={() => setOpen(p)} />
+                <TiltWrap>
+                  <CardFace p={p} i={projects.indexOf(p)} onOpen={() => setOpen(p)} />
+                </TiltWrap>
               </motion.div>
             ))}
-          </div>
-          {footer}
+          </AnimatePresence>
+        </motion.div>
+
+        <div className="mt-10 text-center">
+          <a href={profile.github} target="_blank" rel="noopener noreferrer" className="btn-ghost inline-flex items-center gap-2 px-6 py-3 font-wide text-[11px] font-bold uppercase tracking-[0.14em] text-soft">
+            <GitHubIcon className="h-4 w-4" /> More on GitHub <ArrowUpRight className="h-4 w-4" />
+          </a>
         </div>
-      )}
-      {pinned && <div className="-mt-8 pb-16">{footer}</div>}
+      </div>
       <AnimatePresence>{open && <Detail p={open} onClose={() => setOpen(null)} />}</AnimatePresence>
     </section>
   );

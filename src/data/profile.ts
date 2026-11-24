@@ -36,12 +36,19 @@ export const about = {
 
 export type SkillGroup = { id: string; title: string; blurb: string; items: string[] };
 
+// Grouped exactly from the resume + public GitHub repos. No proficiency scores are shown on purpose.
 export const skillGroups: SkillGroup[] = [
   {
+    id: "programming",
+    title: "Programming",
+    blurb: "Languages I build and teach with every day.",
+    items: ["Python", "SQL", "Core Java"],
+  },
+  {
     id: "ai",
-    title: "AI & Machine Learning",
+    title: "Artificial Intelligence",
     blurb: "Building and evaluating predictive models end to end.",
-    items: ["Python", "Scikit-Learn", "Supervised Learning", "Unsupervised Learning", "Predictive Modelling", "Feature Engineering", "NLP", "Hugging Face Transformers", "IBM SPSS"],
+    items: ["Machine Learning", "Scikit-Learn", "Supervised Learning", "Unsupervised Learning", "Predictive Modelling", "Feature Engineering", "NLP", "Hugging Face Transformers", "IBM SPSS"],
   },
   {
     id: "genai",
@@ -53,13 +60,13 @@ export const skillGroups: SkillGroup[] = [
     id: "data",
     title: "Data Analytics",
     blurb: "Turning data into dashboards and decisions.",
-    items: ["Power BI", "Advanced Excel", "Tableau", "SQL", "MySQL", "Pandas", "NumPy", "Matplotlib", "Seaborn"],
+    items: ["Power BI", "Advanced Excel", "Tableau", "Pandas", "NumPy", "Matplotlib", "Seaborn"],
   },
   {
     id: "dev",
     title: "Development & Tools",
     blurb: "Shipping usable apps, APIs and notebooks.",
-    items: ["Streamlit", "FastAPI", "SQLAlchemy", "Django", "Core Java", "Git & GitHub", "Jupyter Notebook", "VS Code", "IntelliJ IDEA"],
+    items: ["Streamlit", "FastAPI", "Django", "SQLAlchemy", "MySQL", "Git & GitHub", "Jupyter Notebook", "VS Code", "IntelliJ IDEA"],
   },
 ];
 
@@ -70,6 +77,8 @@ export type Job = {
   current?: boolean;
   points: string[];
   tags: string[];
+  /** headline outcomes, each restated from `points` */
+  highlights: string[];
 };
 
 export const experience: Job[] = [
@@ -84,6 +93,7 @@ export const experience: Job[] = [
       "Mentor students on data interpretation and analytics workflows, contributing to a 65% placement-eligibility rate.",
     ],
     tags: ["Excel", "SQL", "Power BI", "Mentoring"],
+    highlights: ["150+ learners", "88% completion", "+65% assessment scores", "65% placement eligibility"],
   },
   {
     org: "Magic Bus India Foundation",
@@ -94,6 +104,7 @@ export const experience: Job[] = [
       "Raised average technical assessment scores by 68%.",
     ],
     tags: ["Python", "Data Preprocessing", "Machine Learning"],
+    highlights: ["180+ learners", "+68% assessment scores"],
   },
   {
     org: "IBM Business Partner",
@@ -105,6 +116,7 @@ export const experience: Job[] = [
       "Designed industry-focused case studies around real business problems — average trainer rating 4.6/5.",
     ],
     tags: ["Python", "IBM Cloud AI", "SPSS", "Predictive Models"],
+    highlights: ["50+ professionals", "4 organisations", "20% faster analysis turnaround", "4.6/5 trainer rating"],
   },
 ];
 
@@ -252,15 +264,26 @@ export const teaching = {
     { title: "Assessments", text: "Graded assignments and rubrics that measure real skill growth (+65–68% scores)." },
     { title: "Industry-oriented", text: "Case studies designed around actual business problems for corporate teams." },
   ],
-  gallery: [
-    { src: "/images/train-mic.webp", alt: "Santhanam addressing learners with a microphone during a training session", w: 900, h: 1350 },
-    { src: "/images/train-board.webp", alt: "Santhanam explaining an AI chatbot interface on an interactive board", w: 1200, h: 800 },
-    { src: "/images/train-lab.webp", alt: "Santhanam guiding participants in a computer lab", w: 1200, h: 968 },
-    { src: "/images/award.webp", alt: "Santhanam receiving an appreciation award from institution faculty", w: 1100, h: 971 },
-    { src: "/images/train-hall.webp", alt: "Santhanam presenting to a large hall of learners", w: 1200, h: 800 },
-    { src: "/images/train-screen.webp", alt: "Santhanam presenting slides on a screen to learners", w: 1200, h: 675 },
-    { src: "/images/train-computer.webp", alt: "Santhanam supervising learners at computers in a training lab", w: 1200, h: 800 },
-    { src: "/images/batch.webp", alt: "Santhanam with a batch of learners", w: 1200, h: 675 },
+  // Programmes delivered — every figure comes from the resume (see `experience`).
+  programmes: [
+    {
+      org: "Anudip Foundation",
+      audience: "150+ learners · multiple batches",
+      topics: ["Excel", "SQL", "Power BI", "Analytics workflows"],
+      outcome: "88% course completion · 65% placement eligibility",
+    },
+    {
+      org: "Magic Bus India Foundation",
+      audience: "180+ learners",
+      topics: ["Python", "Data preprocessing", "Machine learning basics"],
+      outcome: "+68% average technical assessment scores",
+    },
+    {
+      org: "IBM Business Partner",
+      audience: "50+ professionals · 4 organisations",
+      topics: ["Python", "IBM Cloud AI", "SPSS", "Predictive models"],
+      outcome: "4.6/5 average trainer rating",
+    },
   ],
 };
 
@@ -294,6 +317,7 @@ export const nav = [
   { id: "about", label: "About" },
   { id: "skills", label: "Skills" },
   { id: "experience", label: "Experience" },
+  { id: "moments", label: "Moments" },
   { id: "projects", label: "Projects" },
   { id: "lab", label: "AI Lab" },
   { id: "training", label: "Training" },

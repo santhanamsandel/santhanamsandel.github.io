@@ -20,14 +20,29 @@ src/
   app/            layout (SEO, Open Graph, JSON-LD), page, global styles
   components/
     Hero.tsx, Nav.tsx, SmoothScroll.tsx, ProjectVisual.tsx, ui.tsx
-    sections/     About, Skills, Experience, Projects, AILab, Training, Credentials, Contact
-    three/        NeuralCore (hero 3D), LabNetwork (AI Lab 3D)
-  data/profile.ts ← ALL site content lives here
-  lib/hooks.ts    media-query / in-view / WebGL helpers
+    sections/     Stats, About, Skills, Experience, BeyondClassroom, Projects, AILab, Training, Credentials, Contact
+    Lightbox.tsx  accessible full-screen photo viewer
+    Backdrop.tsx  page-wide embers (desktop WebGL) + cursor spotlight
+    three/        Smoke (hero backdrop shader), Embers (particles), LabNetwork (AI Lab 3D)
+  data/profile.ts ← site content (experience, projects, skills, training…)
+  data/gallery.ts ← classroom gallery photos + captions
+  lib/hooks.ts    media-query / in-view / WebGL / idle helpers
+  lib/reveal.ts   shared IntersectionObserver for CSS scroll reveals
 public/
   images/         optimised WebP photos (EXIF/GPS stripped), og.jpg
   Santhanam_L_Resume.pdf
 ```
+
+## Classroom gallery ("Beyond the Classroom")
+
+Photos and captions live in `src/data/gallery.ts`.
+
+1. Export the photo as WebP twice: `name.webp` (~1400px wide) and `name-sm.webp` (~720px wide), into `public/images/gallery/`.
+2. Add an entry with the large file's real pixel size (`w`, `h`), an accurate `alt`, a `caption` category and a short `note`.
+3. Remove a photo by deleting its entry.
+
+Images keep their original aspect ratio (no cropping or stretching) and open in a full-screen lightbox
+(arrow keys / swipe to browse, Esc to close).
 
 ## Updating the portfolio
 
@@ -36,7 +51,7 @@ public/
    - New job: add to the top of `experience`.
 2. **Resume** — replace `public/Santhanam_L_Resume.pdf` (keep the same file name).
 3. **Photos** — drop a new WebP/JPG into `public/images/` and reference it in `profile.ts`
-   (training gallery: `teaching.gallery`). Keep images under ~1200px wide.
+   (classroom photos: `src/data/gallery.ts`). Keep images under ~1400px wide.
 4. Commit and push to `main` — GitHub Actions builds and deploys automatically (~2 min).
 
 ```bash
@@ -44,3 +59,7 @@ npm install
 npm run dev      # http://localhost:3000
 npm run build    # static site in ./out
 ```
+
+## Rollback
+
+A snapshot of the site before the November 2026 upgrade is on the `backup/pre-upgrade-2026-11-24` branch.

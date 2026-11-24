@@ -198,3 +198,84 @@ body {
 .glass-sweep {
   animation: sweep 7s ease-in-out infinite;
 }
+
+/* ---------- CSS-driven reveals (one shared IntersectionObserver adds .is-in) ---------- */
+[data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, var(--reveal-y, 28px), 0);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0s);
+}
+[data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+[data-heading] .split-letter {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(105%);
+  transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.8s ease;
+  transition-delay: calc(var(--i) * 28ms);
+}
+[data-heading] .heading-eyebrow,
+[data-heading] .heading-lead {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+[data-heading] .heading-lead { transition-delay: 0.25s; }
+[data-heading] .heading-bar {
+  transform: scaleX(0);
+  transition: transform 0.8s ease 0.3s;
+}
+[data-heading].is-in .split-letter,
+[data-heading].is-in .heading-eyebrow,
+[data-heading].is-in .heading-lead {
+  opacity: 1;
+  transform: none;
+}
+[data-heading].is-in .heading-bar { transform: scaleX(1); }
+
+/* hero name: plays once on load, no JS */
+@keyframes rise-in {
+  from { transform: translateY(110%); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+.hero-letter {
+  display: inline-block;
+  animation: rise-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(0.9s + var(--i) * 45ms);
+}
+@keyframes crack-draw {
+  from { stroke-dashoffset: 1; opacity: 0; }
+  to { stroke-dashoffset: 0; opacity: 1; }
+}
+.crack-path {
+  stroke-dasharray: 1;
+  animation: crack-draw 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal],
+  [data-heading] .split-letter,
+  [data-heading] .heading-eyebrow,
+  [data-heading] .heading-lead,
+  [data-heading] .heading-bar {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+@keyframes portrait-in {
+  from { transform: scale(1.06); }
+  to { transform: none; }
+}
+@keyframes veil-out {
+  from { opacity: 1; }
+  to { opacity: 0; visibility: hidden; }
+}
+.portrait-in { animation: portrait-in 1.8s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both; }
+.portrait-veil {
+  background: radial-gradient(ellipse at 50% 35%, rgba(2, 6, 17, 0.55), #020611 75%);
+  animation: veil-out 1.6s ease 0.15s both;
+}

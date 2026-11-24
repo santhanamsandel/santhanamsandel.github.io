@@ -3,9 +3,9 @@ import { Inter, Space_Grotesk, JetBrains_Mono, Unbounded } from "next/font/googl
 import "./globals.css";
 
 const inter = Inter({ variable: "--ff-inter", subsets: ["latin"], display: "swap" });
-const display = Space_Grotesk({ variable: "--ff-display", subsets: ["latin"], display: "swap" });
+const display = Space_Grotesk({ variable: "--ff-display", subsets: ["latin"], display: "swap", preload: false });
 const wide = Unbounded({ variable: "--ff-wide", subsets: ["latin"], display: "swap" });
-const mono = JetBrains_Mono({ variable: "--ff-mono", subsets: ["latin"], display: "swap" });
+const mono = JetBrains_Mono({ variable: "--ff-mono", subsets: ["latin"], display: "swap", preload: false });
 
 const SITE = "https://santhanamsandel.github.io";
 const TITLE = "Santhanam L — AI/ML Engineer, Generative AI Specialist & Technical Trainer";
@@ -54,16 +54,27 @@ const jsonLd = {
   url: SITE,
   jobTitle: "AI/ML Engineer & Technical Trainer",
   alumniOf: "Bharathiar University",
+  image: `${SITE}/images/og.jpg`,
+  email: "mailto:santhanaml2605@gmail.com",
+  knowsAbout: ["Machine Learning", "Generative AI", "Python", "SQL", "Power BI", "Data Analytics", "Technical Training"],
   sameAs: ["https://www.linkedin.com/in/santhanam-l26/", "https://github.com/santhanamsandel"],
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${inter.variable} ${display.variable} ${mono.variable} ${wide.variable}`}>
+      <head>
+        {/* LCP: start fetching the hero portrait immediately (matches the <picture> sources in Hero) */}
+        <link rel="preload" as="image" href="/images/hero-cinematic-sm.webp" media="(max-width: 767px)" fetchPriority="high" />
+        <link rel="preload" as="image" href="/images/hero-cinematic.webp" media="(min-width: 768px)" fetchPriority="high" />
+      </head>
       <body className="antialiased bg-ink">
         <a href="#main" className="skip-link">
           Skip to content
         </a>
+        <noscript>
+          <style>{`[data-reveal],[data-heading] *{opacity:1!important;transform:none!important}`}</style>
+        </noscript>
         {children}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       </body>

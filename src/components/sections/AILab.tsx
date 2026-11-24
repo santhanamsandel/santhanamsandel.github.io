@@ -57,6 +57,33 @@ const pipelines: Pipeline[] = [
   },
 ];
 
+/** Lightweight SVG fallback used when WebGL is unavailable. */
+function StaticNetwork({ layers, active }: { layers: number; active: number }) {
+  const sizes = [4, 6, 7, 7, 6, 4, 3];
+  const cols = Array.from({ length: layers }, (_, l) => {
+    const n = sizes[l % sizes.length];
+    const x = 8 + (l / Math.max(1, layers - 1)) * 84;
+    return Array.from({ length: n }, (_, k) => ({ x, y: 12 + ((k + 0.5) / n) * 70 }));
+  });
+  return (
+    <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="absolute inset-0 h-full w-full" aria-hidden>
+      {cols.slice(0, -1).map((col, l) =>
+        col.flatMap((a, i) =>
+          cols[l + 1].map((b, j) => (
+            <line key={`${l}-${i}-${j}`} x1={a.x} y1={a.y} x2={b.x} y2={b.y} vectorEffect="non-scaling-stroke"
+              stroke={l < active ? (l === active - 1 ? "#22d3ee" : "#3b82f6") : "#1e293b"} strokeOpacity={l < active ? 0.5 : 0.6} strokeWidth="1" />
+          )),
+        ),
+      )}
+      {cols.map((col, l) =>
+        col.map((n, i) => (
+          <ellipse key={`${l}-${i}`} cx={n.x} cy={n.y} rx="0.9" ry="1.6" fill={l === active ? "#a5f3fc" : l < active ? "#38bdf8" : "#475569"} />
+        )),
+      )}
+    </svg>
+  );
+}
+
 /* ---------- Tiny keyword-retrieval assistant (runs locally, no API) ---------- */
 type KB = { keys: string[]; answer: string };
 const kb: KB[] = [
@@ -137,7 +164,7 @@ function Assistant() {
       </div>
       <div className="flex flex-wrap gap-2 px-4 pb-3">
         {suggestions.map((s) => (
-          <button key={s} onClick={() => ask(s)} className="rounded-full border border-line px-3 py-1 text-xs text-muted transition hover:border-cyan/50 hover:text-cyan">
+          <button key={s} onClick={() => ask(s)} className="min-h-9 rounded-full border border-white/15 px-3.5 py-2 text-xs text-soft/75 transition hover:border-cyan/50 hover:text-cyan">
             {s}
           </button>
         ))}
@@ -223,13 +250,14 @@ export default function AILab() {
               {/* 3D network visual */}
               <div className="relative h-56 bg-gradient-to-b from-navy/40 to-transparent sm:h-72">
                 <div aria-hidden className="grid-bg absolute inset-0" />
+                {webgl === false && <StaticNetwork layers={p.stages.length} active={stage} />}
                 {webgl && inView && (
                   <LabNetwork layers={p.stages.length} active={stage} animate={!reduced} running={inView} low={isMobile} />
                 )}
                 {/* Stage labels under the layers */}
                 <div className="absolute inset-x-3 bottom-2 flex justify-between">
                   {p.stages.map((s, i) => (
-                    <span key={s.name} className={`font-mono text-[9px] uppercase tracking-wider transition sm:text-[10px] ${i === stage ? "text-cyan" : i < stage ? "text-electric" : "text-muted/60"}`}>
+                    <span key={s.name} className={`font-mono text-[9px] uppercase tracking-wider transition sm:text-[10px] ${i === stage ? "text-cyan" : i < stage ? "text-electric" : "text-muted"}`}>
                       {s.name}
                     </span>
                   ))}

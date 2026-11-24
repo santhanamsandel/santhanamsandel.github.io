@@ -4,7 +4,7 @@ import { motion, useScroll, useSpring } from "framer-motion";
 import { Briefcase, CheckCircle2 } from "lucide-react";
 import { useRef } from "react";
 import { experience } from "@/data/profile";
-import { Reveal, SectionHeading } from "../ui";
+import { Reveal, SectionHeading, TiltCard } from "../ui";
 
 export default function Experience() {
   const ref = useRef<HTMLDivElement>(null);
@@ -39,13 +39,15 @@ export default function Experience() {
                   </span>
 
                   <div className={`hidden md:flex ${right ? "order-2 justify-start" : "justify-end"} pt-5`}>
-                    <Reveal>
+                    <Reveal className={right ? "" : "text-right"}>
                       <p className="font-mono text-sm tracking-wider text-cyan">{job.period}</p>
+                      <p className="mt-2 font-wide text-3xl font-extrabold uppercase leading-none text-white/[0.06] lg:text-5xl">{job.org.split(" ")[0]}</p>
                     </Reveal>
                   </div>
 
                   <Reveal className={`pl-10 md:pl-0 ${right ? "md:order-1" : ""}`} delay={0.1}>
-                    <article className="glass-strong rounded-2xl p-6 transition hover:border-cyan/40 md:p-8">
+                    <TiltCard max={3}>
+                    <article className="p-6 md:p-8">
                       <p className="mb-3 font-mono text-xs tracking-wider text-cyan md:hidden">{job.period}</p>
                       <div className="flex items-start gap-4">
                         <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-cyan/25 bg-cyan/10 text-cyan">
@@ -63,6 +65,13 @@ export default function Experience() {
                           </p>
                         </div>
                       </div>
+                      <ul className="mt-5 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap" aria-label="Key outcomes">
+                        {job.highlights.map((h) => (
+                          <li key={h} className="rounded-lg border border-cyan/25 bg-cyan/[0.07] px-3 py-1.5 text-xs font-semibold text-cyan sm:text-[13px]">
+                            {h}
+                          </li>
+                        ))}
+                      </ul>
                       <ul className="mt-5 space-y-3">
                         {job.points.map((p) => (
                           <li key={p} className="flex gap-3 text-sm leading-relaxed text-soft/80 md:text-[15px]">
@@ -73,12 +82,13 @@ export default function Experience() {
                       </ul>
                       <ul className="mt-5 flex flex-wrap gap-2" aria-label="Focus areas">
                         {job.tags.map((t) => (
-                          <li key={t} className="rounded-full border border-line px-3 py-1 font-mono text-[11px] text-muted">
+                          <li key={t} className="rounded-full border border-white/10 px-3 py-1 font-mono text-[11px] text-soft/70">
                             {t}
                           </li>
                         ))}
                       </ul>
                     </article>
+                    </TiltCard>
                   </Reveal>
                 </li>
               );

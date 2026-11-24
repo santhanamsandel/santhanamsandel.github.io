@@ -5,7 +5,7 @@ import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { nav, profile } from "@/data/profile";
 
-const links = nav.filter((n) => ["about", "experience", "projects", "lab", "training", "contact"].includes(n.id));
+const links = nav.filter((n) => ["about", "experience", "moments", "projects", "lab", "contact"].includes(n.id));
 
 export default function Nav() {
   const [open, setOpen] = useState(false);
@@ -38,7 +38,7 @@ export default function Nav() {
     >
       <nav
         aria-label="Primary"
-        className="glass-strong relative mx-auto flex h-14 max-w-7xl items-center justify-between overflow-hidden rounded-2xl px-4 sm:px-5 md:h-16"
+        className="glass-strong relative mx-auto flex h-14 max-w-7xl !bg-[#050a18]/80 items-center justify-between overflow-hidden rounded-2xl px-4 sm:px-5 md:h-16"
       >
         <a href="#top" className="font-wide text-sm font-extrabold tracking-wide text-soft sm:text-base" aria-label="Santhanam L — home">
           <span className="text-cyan">S</span>ANTHANAM<span className="text-cyan">.</span>

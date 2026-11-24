@@ -36,7 +36,7 @@ export default function Contact() {
   }
 
   const input =
-    "w-full rounded-xl border border-line bg-ink/60 px-4 py-3 text-soft placeholder:text-muted/70 transition focus:border-cyan/60 focus:outline-none focus:ring-2 focus:ring-cyan/20";
+    "w-full rounded-xl border border-line bg-ink/60 px-4 py-3 text-soft placeholder:text-muted transition focus:border-cyan/60 focus:outline-none focus:ring-2 focus:ring-cyan/20";
 
   return (
     <section id="contact" className="relative overflow-hidden py-24 md:py-36" aria-labelledby="contact-title">
@@ -44,7 +44,7 @@ export default function Contact() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading id="contact-title" eyebrow="Get in touch" title="Contact" lead="Open to AI/ML engineering roles, Generative AI projects, corporate training engagements and academic partnerships." />
 
-        <div className="grid gap-6 lg:grid-cols-[1fr_1.2fr]">
+        <div className="grid gap-6 lg:grid-cols-[1fr_1.2fr] [&>*]:min-w-0">
           <div className="space-y-3">
             {channels.map(({ label, value, href, Icon }, i) => (
               <Reveal key={label} delay={i * 0.06}>

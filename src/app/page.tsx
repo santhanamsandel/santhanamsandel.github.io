@@ -6,6 +6,7 @@ import Stats from "@/components/sections/Stats";
 import About from "@/components/sections/About";
 import Skills from "@/components/sections/Skills";
 import Experience from "@/components/sections/Experience";
+import BeyondClassroom from "@/components/sections/BeyondClassroom";
 import Projects from "@/components/sections/Projects";
 import AILab from "@/components/sections/AILab";
 import Training from "@/components/sections/Training";
@@ -25,6 +26,7 @@ export default function Home() {
         <About />
         <Skills />
         <Experience />
+        <BeyondClassroom />
         <Projects />
         <AILab />
         <Training />

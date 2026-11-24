@@ -73,7 +73,7 @@ function HangingBadge() {
           </div>
         </motion.div>
       </motion.div>
-      <p className="absolute bottom-2 w-full text-center font-mono text-[10px] uppercase tracking-[0.25em] text-muted/70">Drag the badge</p>
+      <p className="absolute bottom-2 w-full text-center font-mono text-[10px] uppercase tracking-[0.25em] text-muted">Drag the badge</p>
     </div>
   );
 }
